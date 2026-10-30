@@ -1,0 +1,6 @@
+{
+  "name": "SiliconForge",
+  "description": "Comprehensive virtual lab setup for VLSI students across all domains, real-world semiconductor industry testing procedures, job simulator, and direct interview practice sessions with top engineers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
