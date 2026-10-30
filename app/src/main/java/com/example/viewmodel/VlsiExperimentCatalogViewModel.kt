@@ -27,7 +27,7 @@ data class ExperimentCatalogUiState(
   val isLoading: Boolean = false
 )
 
-class VlsiExperimentCatalogViewModel(
+class VlsiExperimentCatalogViewModel @JvmOverloads constructor(
   application: Application,
   private val repository: VlsiExperimentRepository = VlsiExperimentRepository(
     VlsiDatabase.getDatabase(application).experimentDao()

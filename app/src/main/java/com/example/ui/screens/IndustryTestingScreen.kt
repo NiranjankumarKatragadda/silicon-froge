@@ -24,6 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.model.IndustryJob
 import com.example.model.IndustryTestProcedure
 import com.example.ui.components.IndustrialJobSimulationView
+import com.example.ui.components.SemiconductorJobSimulationHub
 import com.example.model.SiliconTestReport
 import com.example.ui.theme.*
 import com.example.viewmodel.SiliconLabViewModel
@@ -72,7 +73,7 @@ fun IndustryTestingScreen(
         modifier = Modifier.weight(1f).testTag("subtab_simulator")
       )
       TabPill(
-        title = "Job Openings",
+        title = "Job Trends & Apps",
         isSelected = selectedSubTab == 2,
         onClick = { selectedSubTab = 2 },
         modifier = Modifier.weight(1f).testTag("subtab_jobs")
@@ -114,16 +115,16 @@ fun IndustryTestingScreen(
         },
         latestReport = lastGeneratedReport
       )
-      2 -> SemiconductorJobsTab(
-        jobs = viewModel.industryJobs,
-        onSelectProcedure = { procId ->
-          val proc = viewModel.industryProcedures.find { it.id == procId }
-          if (proc != null) {
-            viewModel.selectProcedure(proc)
-            selectedSubTab = 1
+      2 -> {
+        LazyColumn(
+          modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+          contentPadding = PaddingValues(top = 12.dp, bottom = 28.dp)
+        ) {
+          item {
+            SemiconductorJobSimulationHub()
           }
         }
-      )
+      }
       3 -> TestReportsTab(reports = generatedReports)
     }
   }

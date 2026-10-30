@@ -17,6 +17,12 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
+import android.app.Application
+import androidx.lifecycle.ViewModelProvider
+import com.example.viewmodel.CustomSiliconViewModel
+import com.example.viewmodel.JobSimulationViewModel
+import com.example.viewmodel.VlsiExperimentCatalogViewModel
+
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 class VlsiExperimentDashboardTest {
@@ -106,5 +112,23 @@ class VlsiExperimentDashboardTest {
 
     val cmosList = repository.getExperimentsByDomain("CMOS").first()
     assertTrue(cmosList.any { it.id == "custom_finfet_drc" })
+  }
+
+  @Test
+  fun testAndroidViewModelFactory_instantiatesViewModelsSuccessfully() {
+    val app = ApplicationProvider.getApplicationContext<Application>()
+    val factory = ViewModelProvider.AndroidViewModelFactory.getInstance(app)
+
+    // Verify VlsiExperimentCatalogViewModel can be instantiated by factory reflection
+    val catalogVm = factory.create(VlsiExperimentCatalogViewModel::class.java)
+    assertNotNull(catalogVm)
+
+    // Verify JobSimulationViewModel can be instantiated by factory reflection
+    val jobVm = factory.create(JobSimulationViewModel::class.java)
+    assertNotNull(jobVm)
+
+    // Verify CustomSiliconViewModel can be instantiated by factory reflection
+    val customSiliconVm = factory.create(CustomSiliconViewModel::class.java)
+    assertNotNull(customSiliconVm)
   }
 }

@@ -13,9 +13,10 @@ import kotlinx.coroutines.launch
   entities = [
     VlsiExperimentEntity::class,
     StudentCustomCodeEntity::class,
-    CustomNanometerChipEntity::class
+    CustomNanometerChipEntity::class,
+    JobApplicationEntity::class
   ],
-  version = 2,
+  version = 3,
   exportSchema = false
 )
 abstract class VlsiDatabase : RoomDatabase() {
@@ -23,6 +24,7 @@ abstract class VlsiDatabase : RoomDatabase() {
   abstract fun experimentDao(): VlsiExperimentDao
   abstract fun studentCodeDao(): StudentCustomCodeDao
   abstract fun customChipDao(): CustomNanometerChipDao
+  abstract fun jobApplicationDao(): JobApplicationDao
 
   companion object {
     @Volatile
@@ -52,8 +54,54 @@ abstract class VlsiDatabase : RoomDatabase() {
           scope.launch {
             populateInitialExperiments(database.experimentDao())
             populateInitialStudentProjects(database.studentCodeDao(), database.customChipDao())
+            populateInitialJobApplications(database.jobApplicationDao())
           }
         }
+      }
+    }
+
+    suspend fun populateInitialJobApplications(appDao: JobApplicationDao) {
+      if (appDao.getApplicationCountSync() == 0) {
+        appDao.insertApplications(
+          listOf(
+            JobApplicationEntity(
+              id = "app_nv_001",
+              jobId = "job_nv_tpu_arch",
+              jobTitle = "AI Hardware Architecture & RTL Engineer",
+              company = "NVIDIA",
+              location = "Santa Clara, CA",
+              domain = "AI ASIC & NPU Hardware Architecture",
+              applicantName = "Alex Chen",
+              applicantEmail = "alex.chen@stanford.edu",
+              degreeLevel = "M.S. VLSI & Computer Engineering",
+              gpaOrGrade = "3.88",
+              portfolioSummary = "Designed 4-bit Configurable ALU and Aegis-3X 3nm TPU on TSMC N3E PDK",
+              targetFabNode = "TSMC 3nm N3E",
+              atsMatchScore = 94,
+              status = "Interview Offered",
+              submissionTimestamp = System.currentTimeMillis() - (1000L * 60 * 60 * 36),
+              recruiterFeedback = "Strong Verilog and 3nm transistor sizing credentials. Advanced to Round 1 Technical Panel with Principal Architecture Lead."
+            ),
+            JobApplicationEntity(
+              id = "app_apple_002",
+              jobId = "job_apple_pd_sta",
+              jobTitle = "Silicon Physical Design & Timing Signoff Engineer",
+              company = "Apple Silicon",
+              location = "Austin, TX",
+              domain = "Physical Design & Signoff (Floorplan/STA)",
+              applicantName = "Alex Chen",
+              applicantEmail = "alex.chen@stanford.edu",
+              degreeLevel = "M.S. VLSI & Computer Engineering",
+              gpaOrGrade = "3.88",
+              portfolioSummary = "Completed STA Slack Closure, Macro Placement & IR-Drop Power Mesh Virtual Labs",
+              targetFabNode = "TSMC 3nm GAAFET",
+              atsMatchScore = 89,
+              status = "Technical Assessment",
+              submissionTimestamp = System.currentTimeMillis() - (1000L * 60 * 60 * 18),
+              recruiterFeedback = "ATS verified setup/hold margin calculations. Coding challenge link dispatched."
+            )
+          )
+        )
       }
     }
 

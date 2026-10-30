@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.example.data.CustomSiliconRepository
 import com.example.data.local.VlsiDatabase
 
-class CustomSiliconViewModel(
+class CustomSiliconViewModel @JvmOverloads constructor(
   application: Application,
   val repository: CustomSiliconRepository = CustomSiliconRepository(
     codeDao = VlsiDatabase.getDatabase(application).studentCodeDao(),
